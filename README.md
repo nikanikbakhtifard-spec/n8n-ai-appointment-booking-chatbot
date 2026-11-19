@@ -70,4 +70,4 @@ The objective of this project is to demonstrate practical applications of AI age
 
 Author: Masoumeh Nikbakhtifard
 
-<img width="1280" height="762" alt="chatbot_bot" src="https://github.com/user-attachments/assets/74d5fd39-0cfa-4628-bbb7-25a903583233" />
+
