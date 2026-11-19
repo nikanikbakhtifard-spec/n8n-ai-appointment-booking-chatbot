@@ -1,73 +1,118 @@
+[README (1).md](https://github.com/user-attachments/files/35093033/README.1.md)
+
+
 # AI Appointment Booking Chatbot
 
-An AI-powered appointment booking chatbot built with **n8n, OpenAI, and Google Calendar**. The chatbot interacts with users through a conversational interface, checks calendar availability, suggests appointment slots, and assists with booking appointments.
+**A conversational appointment-booking prototype built with n8n, OpenAI GPT-5 mini, and Google Calendar.**
 
-## Project Overview
+This project connects an AI-powered chat interface to an automation workflow that can handle booking requests, maintain conversational context, and create appointments in Google Calendar. A test booking was successfully confirmed and the corresponding calendar event was observed.
 
-This project demonstrates how AI agents and workflow automation can be integrated to simplify appointment scheduling.
+## At a glance
 
-The chatbot understands user messages, retrieves available time slots from Google Calendar, and guides users through the booking process.
-
-## Key Features
-
-- **Conversational AI:** Natural-language interaction powered by OpenAI.
-- **Availability Checking:** Retrieves existing calendar events to identify available appointment slots.
-- **Appointment Scheduling:** Helps users select a suitable time and create calendar events.
-- **Short-term Memory:** Maintains conversational context during interactions.
-- **Automated Workflow:** Connects AI processing with Google Calendar through n8n.
-- **Time Constraints:** Configured to suggest appointments within the next seven days and during business hours.
-
-## Technologies Used
-
-| Technology | Purpose |
+| | |
 |---|---|
-| n8n | Workflow automation and AI agent orchestration |
-| OpenAI | Natural-language understanding and responses |
-| Google Calendar API | Checking availability and creating events |
-| AI Agent | Managing the appointment conversation |
-| n8n Chat | User interaction interface |
+| **Orchestration** | n8n AI Agent |
+| **Language model** | OpenAI GPT-5 mini |
+| **Chat interface** | n8n Hosted Chat |
+| **Memory** | Simple Memory (20-message context window setting) |
+| **Calendar tools** | Google Calendar — Get Many Events and Create Event |
+| **Verified outcome** | A test appointment appeared in Google Calendar |
 
-## Workflow Architecture
+## Features
 
-The workflow consists of the following components:
+- **Natural-language booking:** Customers request an appointment in ordinary conversation.
+- **Guided slot selection:** The assistant suggests three possible time slots and asks the customer to choose one.
+- **Name collection:** The assistant requests the customer's first name before confirming a booking.
+- **Conversational context:** Simple Memory supports multi-turn interactions.
+- **Calendar integration:** The AI Agent has tools for retrieving events and creating an event in Google Calendar.
+- **Time and business-hour instructions:** The demonstration prompt uses a seven-day booking window, 09:00–17:00 business hours, and GMT+3 for customer-facing times.
 
-1. **Chat Trigger:** Receives messages from users.
-2. **AI Agent:** Processes requests and manages the conversation.
-3. **OpenAI Chat Model:** Generates intelligent responses.
-4. **Simple Memory:** Maintains conversational context.
-5. **Google Calendar:** Retrieves existing events and creates appointments.
+> **Scope of validation:** The test below verifies a successful **event-creation outcome**. It does **not** establish that all proposed slots were checked for conflicts, or that double bookings are prevented. Those require separate availability and concurrency tests.
 
-## Chatbot Demo
+## Workflow architecture
 
-![AI Appointment Booking Chatbot](chatbot_bot.jpg)
+```text
+n8n Hosted Chat
+      |
+      v
+When chat message received
+      |
+      v
+   AI Agent -------- OpenAI GPT-5 mini
+      |
+      +-------------- Simple Memory
+      |
+      +-------------- Google Calendar: Get Many Events
+      |
+      +-------------- Google Calendar: Create Event
+      |
+      v
+Chat response / booking confirmation
+```
 
-## Example Interaction
+The workflow is provided as an importable, sanitized n8n JSON export. Credentials, calendar IDs and instance-specific identifiers have been removed and must be configured after importing.
 
-The chatbot can:
+## Demo: appointment booking confirmation
 
-1. Greet the user.
-2. Present three available appointment slots.
-3. Ask for the user's name and preferred time.
-4. Assist with confirming the appointment.
+A test user requested a 30-minute appointment. The assistant proposed three slots, asked for a first name, accepted the first selected slot, and returned a booking confirmation.
 
-## Setup and Configuration
+![Chatbot conversation showing a confirmed appointment](booking-confirmation.png)
 
-To run this workflow:
+*Figure 1 — The chatbot conversation confirms a 30-minute appointment for 20 November 2026, 10:00–10:30 (GMT+3). The unique event URL is concealed in the public screenshot.*
 
-1. Import the workflow JSON file into your n8n instance.
-2. Configure your OpenAI credentials.
-3. Connect your Google Calendar account.
-4. Configure the calendar and relevant scheduling settings.
-5. Publish the workflow and test the chatbot.
+## Demo: Google Calendar event created
 
-Note:API credentials and personal account information are not included in this repository. You must configure your own credentials before running the workflow.
+The corresponding event is visible in Google Calendar at **08:00 on 20 November 2026**, displayed in **GMT+1 (Italy)**. That corresponds to **10:00 GMT+3**, matching the assistant's confirmed appointment time.
 
-## Project Objective
+![Google Calendar displaying the appointment on 20 November 2026 at 08:00 GMT+1](google-calendar-event.png)
 
-The objective of this project is to demonstrate practical applications of AI agents, conversational interfaces, API integrations, and workflow automation in an automated appointment scheduling system.
+*Figure 2 — Calendar verification of the appointment created during the chat demonstration.*
+
+### Test summary
+
+| Test | Observed result | Status |
+|---|---|---|
+| Request a 30-minute booking | Assistant proposed three time slots | ✅ Observed |
+| Select a slot and provide a first name | Assistant acknowledged the selected slot and name | ✅ Observed |
+| Confirm booking | Assistant returned a dated, timed confirmation | ✅ Observed |
+| Create calendar event | Matching event was visible in Google Calendar | ✅ Observed |
+| Validate offered slots against existing events | Calendar lookup at suggestion time was not independently confirmed | ⏳ Not verified |
+| Prevent overlapping bookings | Dedicated conflict test not performed | ⏳ Not verified |
+
+## Reproduce the workflow
+
+1. Download [`AI_Appointment_Booking_Chatbot_Sanitized.json`](AI_Appointment_Booking_Chatbot_Sanitized.json).
+2. In n8n, **Import from File** and select the JSON export.
+3. Connect an OpenAI API or supported gateway credential to **OpenAI Chat Model**.
+4. Connect a Google Calendar credential to both Calendar tool nodes.
+5. Replace `YOUR_GOOGLE_CALENDAR_ID` in the imported Calendar nodes with the calendar you intend to use.
+6. Review the AI Agent's prompt, business hours, timezone, and event duration for your own use case.
+7. Publish the workflow and test the Hosted Chat link.
+8. Send a test booking request and verify the new event in Google Calendar and the corresponding n8n execution logs.
+
+> **Before public deployment:** Add access controls, rate limiting and an explicit check for calendar conflicts before creating events. The example chat was configured for testing and should not be treated as a production-ready scheduling service.
+
+## Repository contents
+
+```text
+.
+├── README.md
+├── AI_Appointment_Booking_Chatbot_Sanitized.json
+├── chatbot_bot.jpg                  # Original chatbot interface preview
+├── booking-confirmation.png        # Test conversation and confirmation
+└── google-calendar-event.png       # Matching Google Calendar event
+```
+
+## What this project demonstrates
+
+- AI agent orchestration in n8n
+- Integration of a language model with external tools
+- Multi-turn conversational interaction
+- Calendar event creation with timezone conversion
+- Practical workflow testing and documentation
 
 ---
 
-Author: Masoumeh Nikbakhtifard
-
+**Project type:** AI automation / portfolio project  
+**Built with:** n8n · OpenAI · Google Calendar
 
