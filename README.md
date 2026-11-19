@@ -56,7 +56,8 @@ The workflow is provided as an importable, sanitized n8n JSON export. Credential
 
 A test user requested a 30-minute appointment. The assistant proposed three slots, asked for a first name, accepted the first selected slot, and returned a booking confirmation.
 
-![Chatbot conversation showing a confirmed appointment](booking-confirmation.png)
+<img width="1280" height="768" alt="2026-11-19 15 37 01" src="https://github.com/user-attachments/assets/bfbd7ac2-d4fa-4d38-b43b-60740159fcb2" />
+
 
 *Figure 1 — The chatbot conversation confirms a 30-minute appointment for 20 November 2026, 10:00–10:30 (GMT+3). The unique event URL is concealed in the public screenshot.*
 
@@ -64,7 +65,8 @@ A test user requested a 30-minute appointment. The assistant proposed three slot
 
 The corresponding event is visible in Google Calendar at **08:00 on 20 November 2026**, displayed in **GMT+1 (Italy)**. That corresponds to **10:00 GMT+3**, matching the assistant's confirmed appointment time.
 
-![Google Calendar displaying the appointment on 20 November 2026 at 08:00 GMT+1](google-calendar-event.png)
+<img width="1280" height="769" alt=" calender" src="https://github.com/user-attachments/assets/b5cc2f94-923b-40e2-8616-d02fab6abc08" />
+
 
 *Figure 2 — Calendar verification of the appointment created during the chat demonstration.*
 
