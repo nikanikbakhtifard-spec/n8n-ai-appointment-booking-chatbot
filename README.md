@@ -77,7 +77,8 @@ The chatbot processed the request, confirmed the appointment, and returned a Goo
 
 The screenshot below demonstrates the conversation between the user and the AI assistant, including the appointment request, proposed time slots, customer information, and booking confirmation.
 
-![AI Chatbot Booking Confirmation](booking-confirmation.png)
+<img width="1280" height="768" alt="2026-11-19 15 37 01" src="https://github.com/user-attachments/assets/b318cbaf-e3a0-4b7a-9d5c-f8e90810e903" />
+
 
 *Figure 1. Successful appointment booking and confirmation through the AI-powered chatbot.*
 
@@ -106,8 +107,8 @@ The difference between the chatbot time and Google Calendar time reflects the ti
 ### Test 2 — Google Calendar Event Creation
 
 The screenshot below shows the appointment successfully recorded in Google Calendar following the chatbot interaction.
+<img width="1280" height="769" alt=" calender" src="https://github.com/user-attachments/assets/82607c94-d9f5-444c-b214-3e85f313c1e4" />
 
-![Google Calendar Appointment Verification](google-calendar-event.png)
 
 *Figure 2. Google Calendar verification of the appointment created during the chatbot booking test.*
 
